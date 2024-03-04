@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icia.semi.dao.SemiDao">
+
+<!-- 게시글 기능-->
+	<select id="getContentList" resultType="content">
+		SELECT * FROM contentlist
+		LIMIT
+		#{pageNum},#{listCnt}
+	</select>
+
+	<insert id="insertContent" parameterType="content">
+		INSERT INTO content_tbl
+		VALUES(null,#{m_id}, #{c_name} , #{c_storename}, #{c_time} , #{c_money} ,
+		#{c_address} ,
+		#{c_day}, #{c_content} , #{p_sysname}) 
+	</insert>
+
+
+	<select id="selectContent" parameterType="Integer"
+		resultType="content">
+		SELECT * FROM contentList
+		WHERE c_id = #{c_id}
+	</select>
+
+	<update id="updateContent" parameterType="content">
+		UPDATE content_tbl
+		SET
+		c_name=#{c_name},c_storename=#{c_storename},c_content=#{c_content},c_money=#{c_money},c_address=#{c_address},c_day=#{c_day},c_time=#{c_time},p_sysname=#{p_sysname}
+		WHERE c_id=#{c_id}
+	</update>
+	
+	<delete id="deleteContent" parameterType="Integer">
+	DELETE FROM content_tbl
+   WHERE c_id = #{c_id}
+	</delete>
+	
+	<!-- 회원가입 기능-->
+	
+	<select id="checkDuplicateId" parameterType ="string" resultType ="Integer">
+	SELECT COUNT(*) FROM memberjoin_table WHERE m_id = #{m_id}
+	</select>
+	
+	<insert id="insertMember" parameterType ="com.icia.semi.dto.memberDto">
+	INSERT INTO memberjoin_table
+	VALUES (
+		#{m_id},
+		#{m_pass},
+		#{m_name},
+		#{m_birth}
+		
+	)
+	</insert>
+	
+	<select id= "login" parameterType ="member" resultType = "member">
+		SELECT * FROM memberjoin_table WHERE m_id = #{m_id} AND m_pass=#{m_pass}
+	</select>
+	<!-- 이력서 상세보가 -->
+	<select id="getDetail" parameterType  ="integer" resultType="myDto">
+		SELECT * FROM myselllist
+		WHERE s_id = #{s_id} AND m_id = #{m_id} 
+	</select>
+	<!-- 이력서 작성 -->
+	<insert id="mysellWrite" parameterType="myDto">
+		INSERT INTO myselltbl 
+		VALUES(null , #{s_name},#{s_age}, #{s_contents},
+			   #{s_address}, #{s_sysname}, #{m_id})
+	</insert>
+	<!--  이력서 수정 -->
+	<update id="updateMysell" parameterType="myDto">
+		UPDATE myselltbl
+		SET	s_name=#{s_name},s_contents=#{s_contents},
+		 s_address=#{s_address}, s_sysname=#{s_sysname}
+		WHERE s_name=#{s_name}
+	</update>
+	
+	<select id="getmysellList" resultType="myDto">
+		SELECT * FROM myselllist
+		LIMIT
+		#{pageNum},#{listCnt}
+	</select>
+	
+	<insert id = "apply" parameterType="myDto">
+		INSERT INTO applytbl
+		VALUSE(null , #{c_id} ,#{m_id} ,#{c_storename})
+	</insert>
+	
+	<select id="getapplyList" resultType = "apply">
+	SELECT * FROM applytbl where a_id = #{a_id}
+	LIMIT
+		#{pageNum},#{listCnt}
+	</select>
+	
+	
+</mapper>
