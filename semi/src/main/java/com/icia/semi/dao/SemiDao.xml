@@ -59,12 +59,12 @@
 	</select>
 	<!-- 이력서 상세보가 -->
 	<select id="getDetail" parameterType  ="integer" resultType="myDto">
-		SELECT * FROM myselllist
-		WHERE s_id = #{s_id} AND m_id = #{m_id} 
+		SELECT * FROM myselltbl
+		WHERE s_id = "${s_id}"
 	</select>
 	<!-- 이력서 작성 -->
 	<insert id="mysellWrite" parameterType="myDto">
-		INSERT INTO myselltbl 
+		INSERT INTO myselltbl (s_id, s_name, s_age, s_contents, s_address, s_sysname, m_id)
 		VALUES(null , #{s_name},#{s_age}, #{s_contents},
 			   #{s_address}, #{s_sysname}, #{m_id})
 	</insert>
@@ -72,8 +72,8 @@
 	<update id="updateMysell" parameterType="myDto">
 		UPDATE myselltbl
 		SET	s_name=#{s_name},s_contents=#{s_contents},
-		 s_address=#{s_address}, s_sysname=#{s_sysname}
-		WHERE s_name=#{s_name}
+		 s_address=#{s_address}, s_sysname=#{s_sysname}, m_id = #{m_id}
+		WHERE s_id=${s_id}
 	</update>
 	
 	<select id="getmysellList" resultType="myDto">
@@ -82,7 +82,7 @@
 		#{pageNum},#{listCnt}
 	</select>
 	
-	<insert id = "apply" parameterType="myDto">
+	<insert id = "getpostapplyList" parameterType="myDto">
 		INSERT INTO applytbl
 		VALUSE(null , #{c_id} ,#{m_id} ,#{c_storename})
 	</insert>
@@ -92,6 +92,8 @@
 	LIMIT
 		#{pageNum},#{listCnt}
 	</select>
-	
+	<select id="getMysellByMember" parameterType="java.lang.String" resultType="com.icia.semi.dto.mysellDto">
+		SELECT * FROM myselltbl WHERE m_id = #{m_id}
+	</select>
 	
 </mapper>

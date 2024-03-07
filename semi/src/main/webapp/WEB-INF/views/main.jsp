@@ -25,7 +25,7 @@
 	<div class="content">
 		<div class="list-title">
 			<h2 class="form-header">구인 목록</h2>
-			<button class="jf-btn" onclick="location.href='./jobFrm'">게시글등록</button>
+			<button class="wr-btn" onclick="location.href='./jobFrm'">게시글등록</button>
 		</div>
 	
 	<div class="data-area">

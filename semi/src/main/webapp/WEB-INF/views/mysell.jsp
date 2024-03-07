@@ -22,21 +22,20 @@ $(function() {
 		<div class="mysell-home">
 			<div class="detail">
 				<div class="detail-sub" id = "mysellbtn">
-					<button value="${sessionScope.member.m_id}">이력서보기</button>
+				<form action="submit" method="get">
+					<a href = "mysellDetail?s_id=${s_id}">이력서보기</a>
+					<input type="hidden" name="s_id" value="${sessionScope.member.m_id}">
+				</form>
 				</div>
 				<div class="detail-sub">
-					<a href="mysellWrite">이력서작성</a>
+					<button class="btn-write" onclick="location.href='./mysellWrite'">이력서작성</button>
 				</div>
 				<div class="detail-sub">
-					<a href="mysellFrm">이력서수정</a>
+					<button class="btn-write" onclick='location.href="./mysellFrm?s_id=${s_id}"'>이력서수정</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
-<script>
-$("#mysellbtn").click(function() {
-	location.href = `mysellDetail?s_id=${myDto.s_id} & m_id = ${sessionScope.member.m_id}`;
-});
-</script>
+
 </html>

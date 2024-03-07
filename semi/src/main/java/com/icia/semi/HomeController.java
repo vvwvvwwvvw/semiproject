@@ -89,14 +89,15 @@ public class HomeController {
 		return view;
 	}
 
-	// 첫 화면페이
+	// 첫 화면페이지
 	@GetMapping("/")
 	public String home() {
 
 		return "home";
 
 	}
-	// 로그인 페이지 불러오기 
+
+	// 로그인 페이지 불러오기
 	@GetMapping("login")
 	public String login() {
 
@@ -107,30 +108,28 @@ public class HomeController {
 // 로그인 기능
 	@PostMapping("login")
 	public String processLogin(memberDto member, HttpSession session, RedirectAttributes rttr) {
-	  log.info("processLogin()");
-	  String loginSuccess = sServ.authenticate(member, session, rttr);
+		log.info("processLogin()");
+		String loginSuccess = sServ.authenticate(member, session, rttr);
 
-	 
-	  return loginSuccess;
+		return loginSuccess;
 	}
-	//로그아웃 기능
-	
+	// 로그아웃 기능
+
 	@GetMapping("logout")
 	public String logout(HttpSession session, RedirectAttributes rttr) {
 		log.info("logout");
 		String view = sServ.logout(session, rttr);
 		return view;
 	}
-	
+
 	@PostMapping("logout")
 	public String processLogout(HttpSession session, RedirectAttributes rttr) {
-	  log.info("processLogout");
-	  String logoutSuccess = sServ.logout(session, rttr);
-	  return logoutSuccess;
+		log.info("processLogout");
+		String logoutSuccess = sServ.logout(session, rttr);
+		return logoutSuccess;
 	}
 
-	
-	//회원가입
+	// 회원가입
 	@PostMapping("join")
 	public String processMemberjoin(memberDto member, RedirectAttributes rttr) {
 		log.info("processMemberjoin() : id - {}", member.getM_id());
@@ -154,90 +153,125 @@ public class HomeController {
 
 		return res;
 	}
-	
+
 	@GetMapping("mysell")
-	public String mysell(Model model) {
+	public String mysell(Model model, HttpSession session) {
 		log.info("mysell()");
+
+		// 1. Check for null session attribute (memberDto)
+		memberDto mDto = (memberDto) session.getAttribute("member");
+		if (mDto == null) {
+			// Handle null memberDto scenario (e.g., redirect to login page)
+			return "redirect:/login"; // Or handle differently based on your application logic
+		}
+
+		// 2. Check for empty list returned by service
+		List<mysellDto> myList = sServ.getMysellByMember(session, model);
+		if (myList == null || myList.isEmpty()) {
+			// Handle empty list scenario (e.g., display message)
+			model.addAttribute("message", "No sales listings found.");
+			return "mysell";
+		}
+
+		// 3. Access first element safely after checks
+		mysellDto myDTO = myList.get(0);
+		model.addAttribute("s_id", myDTO.getS_id());
 		return "mysell";
 	}
+
 	// 회원 이력서 작성 넘겨줌
-		@GetMapping("mysellWrite")
-		public String write() {
-			log.info("write");
-			return "mysellWrite";
-		}
-		
-		// 회원 이력서 작성페이지
-		@PostMapping("mysellWrite")
-		public String mysellWrite(@RequestPart List<MultipartFile> files,
-								  mysellDto myDto,
-								  HttpSession session,
-								  RedirectAttributes rttr) {
-			log.info("mysellWrite()");
-			
-			String view = sServ.mysellWrite(files, myDto, session, rttr);
-			
-			return view;
-		}
-		// 이력서 수정페이지 이동
-		@GetMapping("mysellFrm")
-		public String mysellFrm(Integer s_id, Model model ) {
-			log.info("updateFrm()");
-			
-			sServ.getDetail(s_id, model);
-			return "mysellFrm";
-		}
-		
-		// 이력서 수정
-		@PostMapping("myUpdate")
-		public String myUpdate(@RequestParam List<MultipartFile> files,
-							mysellDto myDto,
-								HttpSession session,
-								RedirectAttributes rttr) {
-			log.info("myUpdate()");
-			
-			String view = sServ.mysellWrite(files, myDto, session, rttr);
-		
-			return view;
-		}
-		// 회원 이력서 보기
-		@GetMapping("mysellDetail")
-		public String mysellDetail(Integer s_id, Model model) {
-			
-			log.info("mysellDetail()");
-			
-			sServ.getDetail(s_id, model);
+	@GetMapping("mysellWrite")
+	public String write() {
+		log.info("write");
+		return "mysellWrite";
+	}
+
+	// 회원 이력서 작성페이지
+	@PostMapping("mysellWrite")
+	public String mysellWrite(@RequestPart List<MultipartFile> files, mysellDto myDto, HttpSession session,
+			RedirectAttributes rttr) {
+		log.info("mysellWrite()");
+
+		String view = sServ.mysellWrite(files, myDto, session, rttr);
+
+		return view;
+	}
+
+	// 이력서 수정페이지 이동
+	@GetMapping("mysellFrm")
+	public String mysellFrm(Integer s_id, Model model) {
+		log.info("updateFrm()");
+
+		sServ.getDetail(s_id, model);
+		return "mysellFrm";
+	}
+
+	// 이력서 수정
+	@PostMapping("myUpdate")
+	public String myUpdate(@RequestParam List<MultipartFile> files, mysellDto myDto, HttpSession session,
+			RedirectAttributes rttr) {
+		log.info("myUpdate()");
+
+		String view = sServ.mysellWrite(files, myDto, session, rttr);
+
+		return view;
+	}
+
+	@GetMapping("mysellDetail")
+	public String mysellDetail(@RequestParam(required = false) Integer s_id, Model model) {
+
+		log.info("mysellDetail()");
+
+		mysellDto myDto = sServ.getDetail(s_id, model);
+
+		if (s_id == null) {
+			// s_id가 없는 경우 처리 (예: 메시지 표시)
+			model.addAttribute("message", "이력서 정보가 없습니다.");
 			
 			return "mysellDetail";
-			
+		}
+		model.addAttribute("myDto", myDto);
+
+		return "mysellDetail";
 	}
-		
-		// 지원자 목록 보기
-		@GetMapping("mysellList")
-		public String mysellList(Integer pageNum, Model model, HttpSession session) {
-			log.info("mysellList()");
 
-			String view = sServ.getmysellList(pageNum, model, session);
+	// 지원자 목록 보기
+	@GetMapping("mysellList")
+	public String mysellList(Integer pageNum, Model model, HttpSession session) {
+		log.info("mysellList()");
 
-			return view;
-		}
-		@PostMapping("apply")
-		public String apply(applyDto apply, Model model, HttpSession session) {
-			log.info("apply()");
-			
-			String view = sServ.getapply(apply,model,session);
-			
-			return view;
-		}
-		
-		// 내가 지원한 업체 보기
-		@GetMapping("applyList")
-		public String applyList(Integer pageNum, Model model, HttpSession session) {
-			log.info("applyList()");
-			
-			String view = sServ.getapplyList(pageNum, model, session);
-			
-			return view;
-		}
-		
+		String view = sServ.getmysellList(pageNum, model, session);
+
+		return view;
+	}
+
+	@PostMapping("apply")
+	public String apply(applyDto apply, Model model, HttpSession session) {
+
+		log.info("apply()");
+
+		String view = sServ.getapply(apply, model, session);
+
+		return view;
+	}
+
+	// 업체 지원자 보기
+	@GetMapping("applyList")
+	public String applyList(Integer pageNum, Model model, HttpSession session) {
+		log.info("applyList()");
+
+		String view = sServ.getapplyList(pageNum, model, session);
+
+		return view;
+	}
+
+	@PostMapping("applyList")
+	public String postapplyList(mysellDto myDto, HttpSession session, RedirectAttributes rttr, Model model) {
+		log.info("postapplyList()");
+
+		String view = sServ.getpostapplyList(myDto, session, rttr, model);
+
+		return view;
+	}
+
 }

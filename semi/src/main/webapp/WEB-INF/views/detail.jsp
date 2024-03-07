@@ -77,11 +77,11 @@
 				<button class="btn-write" id="delbtn">삭제</button>
 				<button class="btn-sub" id="backbtn">뒤로</button>
 				<form action="apply" method="post">
-				<button class="btn-write" id="applybtn">지원하기</button>
+				<button type="submit" class="btn-write" id="applybtn">지원하기</button>
 				</form>
-				
-				<button class="btn-write" id="applyContactbtn">지원자 확인</button>
-				
+				<form action="applyList" method="get">
+				<button  class="btn-write" id="applyContactbtn">지원자 확인</button>
+				</form>
 			</div>
 
 		</div>

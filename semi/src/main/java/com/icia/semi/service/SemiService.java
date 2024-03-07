@@ -28,10 +28,10 @@ public class SemiService {
 	// DAO
 	@Autowired
 	private SemiDao sDao;
-	
+
 	public String getapplyList(Integer pageNum, Model model, HttpSession session) {
 		log.info("getapplyList()");
-		
+
 		if (pageNum == null) {
 			pageNum = 1; // 처음에 페이지가 열릴때 첫 페이지가 되도록 설정
 		}
@@ -41,16 +41,16 @@ public class SemiService {
 		Map<String, Integer> pMap = new HashMap<String, Integer>();
 		pMap.put("pageNum", (pageNum - 1) * listCnt);
 		pMap.put("listCnt", listCnt);
-		
+
 		List<applyDto> aList = sDao.getapplyList(pMap);
-		
-		model.addAttribute("aList",aList);
-		
+
+		model.addAttribute("aList", aList);
+
 		String pageHtml = getPaging(pageNum, listCnt);
 		model.addAttribute("paging", pageHtml);
 
 		session.setAttribute("paging", pageNum);
-		
+
 		return "applyList";
 	}
 
@@ -127,7 +127,7 @@ public class SemiService {
 		String sysname = null; // 변경하는 파일명
 		String oriname = null; // 원래 파일명
 
-		String realPath = session.getServletContext().getRealPath("/"); 
+		String realPath = session.getServletContext().getRealPath("/");
 		log.info(realPath);
 		realPath += "resources/upload/";
 		File folder = new File(realPath);
@@ -220,6 +220,7 @@ public class SemiService {
 		rttr.addFlashAttribute("msg", msg);
 		return view;
 	}
+
 // 로그인 기능
 	public String authenticate(memberDto member, HttpSession session, RedirectAttributes rttr) {
 		log.info("authenticate()");
@@ -233,12 +234,12 @@ public class SemiService {
 			msg = "로그인 성공";
 			view = "redirect:main?pageNum=1";
 			session.setAttribute("member", loging);
-			
+
 		} else {
 			msg = "로그인 실패 아이디 혹은 비밀번호를 다시 확인해 주세요";
 			view = "redirect:login";
 		}
-		
+
 		rttr.addFlashAttribute("msg", msg);
 		return view;
 	}
@@ -298,7 +299,7 @@ public class SemiService {
 		String view = null;
 		String upFile = files.get(0).getOriginalFilename();
 		memberDto loging = (memberDto) session.getAttribute("member");
-		String m_id = loging.getM_id(); 
+		String m_id = loging.getM_id();
 		System.out.println(myDto);
 
 		try {
@@ -347,17 +348,21 @@ public class SemiService {
 	}
 
 // 이력서 상세보기
-	public void getDetail(Integer s_id, Model model) {
+	public mysellDto getDetail(Integer s_id, Model model) {
 		log.info("getDetail()");
 		
 		mysellDto myDto = sDao.getDetail(s_id);
-	
+
 		model.addAttribute("myDto", myDto);
+	
 		log.info("myDto: " + myDto);
+		System.out.println(myDto);
+	
+		return myDto;
 	}
 
 // 이력서 수정
-	public String mysellUpdate(List<MultipartFile> files,mysellDto myDto, HttpSession session,
+	public String mysellUpdate(List<MultipartFile> files, mysellDto myDto, HttpSession session,
 			RedirectAttributes rttr) {
 		log.info("mysellUpdate()");
 		String msg = null;
@@ -388,30 +393,29 @@ public class SemiService {
 	}
 
 	// 이력서 삭제
-	
-	
+
 	public String mysellDelete(Integer m_id, HttpSession session, RedirectAttributes rttr) {
 		log.info("mysellDelete()");
 		String msg = null;
 		String view = null;
 		mysellDto myDto = sDao.mysellDelete(m_id);
 		String picture = myDto.getS_sysname();
-		
+
 		try {
-			if(picture != null) {
+			if (picture != null) {
 				fileDelete(picture, session);
 			}
 			sDao.mysellDelete(m_id);
-			
+
 			view = "redirect:mysell?pageNum=1";
 			msg = "삭제성공";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			view = "redirect:mysellDetail?pageNum=1";
 			msg = "삭제실패";
 		}
-		
-		rttr.addFlashAttribute("msg",msg);
+
+		rttr.addFlashAttribute("msg", msg);
 		return view;
 	}
 
@@ -439,14 +443,32 @@ public class SemiService {
 
 		session.setAttribute("paging", pageNum);
 
-		return "mysellList";
+		return "applyList";
 	}
 
-	public String getapply(applyDto apply , Model model, HttpSession session) {
-		
-		
+	public String getapply(applyDto apply, Model model, HttpSession session) {
+
 		return null;
 	}
 
+	public List<mysellDto> getMysellByMember(HttpSession session, Model model) {
+		log.info("getMysellByMember()");
+		memberDto mDTO = (memberDto) session.getAttribute("member");
+		List<mysellDto> mysellDtos = sDao.getMysellByMember(mDTO.getM_id());
+		
+		return mysellDtos;
+	}
 
+	public String getpostapplyList(mysellDto myDto, HttpSession session,
+			RedirectAttributes rttr , Model model) {
+
+		log.info("getpostapplyList");
+		
+		sDao.getpostapplyList(myDto);
+		
+		model.addAttribute("myDto" , myDto);
+		
+		return "applyList";
+		
+	}	
 }

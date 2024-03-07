@@ -37,7 +37,7 @@
 </script>
 </head>
 <body>
-		<jsp:include page="header.jsp" />
+	<jsp:include page="header.jsp" />
 	<div class="wrap">
 		<div class="content">
 			<form action="jobProc" method="post" enctype="multipart/form-data">
@@ -56,14 +56,14 @@
 				<input type="text" class="write-input" name="c_address" autofocus
 					placeholder="주소" required> <br> <input type="text"
 					class="write-input" name="c_day" autofocus placeholder="날짜"
-					required> <br>
-				<input type="text" class="write-input" name="c_time" autofocus
-					placeholder="시간" required><br>
+					required> <br> <input type="text" class="write-input"
+					name="c_time" autofocus placeholder="시간" required><br>
 				<textarea rows="10" class="write-input ta" name="c_content"
 					placeholder="상세내용"></textarea>
-					
-			<input type="hidden" class="write-input" value="${sessionScope.member.m_id}" name ="m_id" 
-			autofocus placeholder="작성자">	
+
+				<input type="hidden" class="write-input"
+					value="${sessionScope.member.m_id}" name="m_id" autofocus
+					placeholder="작성자">
 				<div class="btn-area">
 					<input type="submit" class="btn-write" value="등록"> <input
 						type="reset" class="btn-write" value="수정"> <input

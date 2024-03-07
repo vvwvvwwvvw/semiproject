@@ -15,7 +15,7 @@
 		<div class="logout-btn">
 			<h5>${member.m_name} 님 환영합니다</h5>
 			<form action="logout" method="post">
-				<input type="submit" value="로그아웃">
+				<input class= "log-out" type="submit" value="로그아웃">
 		</form>
 		</div>
 	</div>

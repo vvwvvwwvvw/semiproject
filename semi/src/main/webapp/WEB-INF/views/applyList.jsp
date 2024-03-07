@@ -42,18 +42,18 @@
 							<img src="resources/images/no_image.jpg"
 								class="poster-pre">
 						</c:if>
-						<c:if test = "${!empty mysellitem.s_sysname}">
-							<img src = "resources/upload/${mysellitem.s_sysname}"
+						<c:if test = "${!empty applyitem.p_sysname}">
+							<img src = "resources/upload/${applyitem.s_sysname}"
 							class = "poster-pre">
 						</c:if>
 					</a>
 					<div class ="info-pre">
 					<div class ="title-pre">
-						<a href="detail?c_id=${apply.c_id}">
-						${contentitem.c_name}
+						<a href="mysellDetail?c_id=${apply.c_id}">
+						${applyitem.c_name}
 						</a>
 					</div>
-					<div class = "content-pre">${contentiteme.c_storename}</div>
+					<div class = "content-pre">${applyitem.c_storename}</div>
 					</div>
 				</div>
 			</c:forEach>

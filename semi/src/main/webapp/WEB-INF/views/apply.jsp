@@ -12,13 +12,42 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<div class="wrap">
-		<div class="content">
-			<div class="list-title">
-				<h2 class="form-header">지원 목록</h2>
-				
+	
+		<!-- 게시글 목록 출력 -->
+		<c:if test="${empty aList}">
+			<div class="content-item">
+				<span class="none-content"> 지원한 업체가 없습니다</span>
 			</div>
-		</div>
+		</c:if>
+		<c:if test="${!empty aList}">
+			<c:forEach var="applyitem" items="${aList}">
+				<div class="apply-item">
+					<a href="applyList?c_id=${applyitem.c_id}"> 
+					<c:if test="${empty applyitem.p_sysname}">
+							<img src="resources/images/no_image.jpg"
+								class="poster-pre">
+						</c:if>
+						<c:if test = "${!empty applyitem.p_sysname}">
+							<img src = "resources/upload/${applyitem.s_sysname}"
+							class = "poster-pre">
+						</c:if>
+					</a>
+					<div class ="info-pre">
+					<div class ="title-pre">
+						<a href="mysellDetail?c_id=${apply.c_id}">
+						${applyitem.c_name}
+						</a>
+					</div>
+					<div class = "content-pre">${applyitem.c_storename}</div>
+					</div>
+				</div>
+			</c:forEach>
+		</c:if>
+	
+	<div class="paging-area">
+		<div class="paging">${paging}</div>
 	</div>
+	
 </body>
+</html>
 </html>

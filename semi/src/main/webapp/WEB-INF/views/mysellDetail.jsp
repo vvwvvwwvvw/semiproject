@@ -11,8 +11,16 @@
 	integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
 	crossorigin="anonymous"></script>
 </head>
-<jsp:include page="header.jsp" />
+<script>
+	$(function() {
+		let msg = "${msg}";
+		if (msg != "") {
+			alert(msg);
+		}
+	});
+</script>
 <body>
+	<jsp:include page="header.jsp" />
 	<div class="mysell-info">
 		<h1>이 력 서</h1>
 	</div>
@@ -28,27 +36,35 @@
 			</div>
 			<div>
 				이름:<span class="s_name">${myDto.s_name}</span><br> 나이:<span
-					class="m_age"></span>
+					class="s_age">${myDto.s_age}</span><br> 거주지:<span
+					class="s_address">${myDto.s_address}</span>
+				<div class="s_comment">
+					내용:
+					<div class="form-control" style="width: 40%; height: 80%;">${myDto.s_contents}</div>
+
+				</div>
 			</div>
-			<div class="m_comment"></div>
-			<div class="form-control" style="width: 1000px; height: 500px;">${myDto.s_contents}</div>
-			거주지:
-			<sapn class="s_address">${myDto.s_address}</sapn>
 		</div>
 	</div>
 
-
-
-	<button type="button" id="updatebtn" class="btn btn-primary">수정</button>
-	<button type="button" id="backbtn" class="btn btn-primary">뒤로가기</button>
+	<button type="button" id="updatebtn" class="btn-write">수정</button>
+	<button type="button" id="backbtn" class="btn-write">뒤로가기</button>
+	<button type="button" id="Writebtn" class="btn-write" onclick="location.href='./mysellWrite'">이력서 작성</button>
 </body>
 <script>
+	$("#Writebtn").hide();
+	
+	if(${myDto.s_id} == null){
+		
+		$("#Writebtn").show();
+	}
+
 	$("#backbtn").click(function() {
 		location.href = `./mysell?pageNum=${pageNum}`;
 	});
 
 	$("#updatebtn").click(function() {
-		location.href = `./mysellFrm?s_name=${myDto.s_name}`;
+		location.href = `./mysellFrm?s_id=${myDto.s_id}`;
 	});
 </script>
 </html>

@@ -43,19 +43,19 @@
 	<form action="mysellWrite" method="post" enctype="multipart/form-data">
           <legend>이력서 작성</legend>      
           <div class="form-group">
-            <input type="text"  class="form-control" id="s_name" name="s_name" 
+            <input type="text"  class="write-input" id="s_name" name="s_name" 
             style="width: 450px;" placeholder="사장님들에게 노출될 이름을 입력해주세요" required>
           </div>
           <div class="form-group">
-            <input type="text"  class="form-control" id="s_age" name="s_age" 
+            <input type="text"  class="write-input" id="s_age" name="s_age" 
             style="width: 450px;" placeholder="나이를 입력해 주세요" required>
           </div>
           <div class="form-group">
-            <textarea class="form-control" id="s_content" name="s_contents" rows="3" 
+            <textarea class="write-input" id="s_content" name="s_contents" rows="3" 
             style="width: 1000px; height: 500px;" rows="10" cols="50" placeholder="본인 어필" required></textarea>
           </div>
           <div class="form-group">
-            <input type="text"  class="form-control" id="s_address" name="s_address" 
+            <input type="text"  class="write-input" id="s_address" name="s_address" 
             style="width: 450px;" placeholder="거주지를 입력해 주세요" required>
             <input type="hidden" class="write-input" value="${sessionScope.member.m_id}" name ="m_id" 
 			autofocus placeholder="작성자">
@@ -64,10 +64,10 @@
 					<!-- 파일 입력 처리 영억 -->
 					<label for="file">사진</label> <input type="file" name="files"
 						id="file"> <input type="text" class="upload-name"
-						value="파일선택" readonly>
+						value="파일선택" style="width: 450px;" readonly>
 				</div>
-          <input type="submit" class="btn btn-primary" id="writebtn" value="작성완료">
-          <button class="btn btn-primary"  id="backbtn">뒤로가기</button>
+          <input type="submit" class="btn-write" id="writebtn" value="작성완료">
+          <button class="btn-write"  id="backbtn">뒤로가기</button>
       	</form>
 </body>
 <script>

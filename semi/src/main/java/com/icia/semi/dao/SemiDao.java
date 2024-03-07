@@ -57,6 +57,10 @@ public interface SemiDao {
 		void apply(applyDto aDto);
 
 		List<applyDto> getapplyList(Map<String, Integer> pMap);
+
+		List<mysellDto> getMysellByMember(String m_id);
+
+		void getpostapplyList(mysellDto myDto);
 		
 		
 
